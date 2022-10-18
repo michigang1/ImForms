@@ -10,8 +10,32 @@
 
 В markdown-файлі використовується опис діаграми
 
-```md
+**Діаграма прецедентів**
 
+<center style="
+    border-radius:4px;
+    border: 1px solid #cfd7e6;
+    box-shadow: 0 1px 3px 0 rgba(89,105,129,.05), 0 1px 1px 0 rgba(0,0,0,.025);
+    padding: 1em;"
+>
+@startuml
+actor Guest
+actor User
+actor Interviewer
+
+User -u-|> Guest
+Interviewer-u-|> User
+
+usecase "**NOT_LOGGED**\nЗареєструватись та авторизуватись" as NL
+usecase "**LOGGED**\nОтримати та пройти опитування" as U
+usecase "**GROUP**\nСтворити та редагувати організацію\nСтворити, аналізувати та редагувати опитування" as O
+Guest -r-> NL
+User -r-> U
+Interviewer -r-> O
+@enduml
+</center>
+<br>
+**Схеми використання для незареєстрованого користувача**
 <center style="
     border-radius:4px;
     border: 1px solid #cfd7e6;
@@ -20,67 +44,22 @@
 >
 
 @startuml
+actor Guest
 
-    right header
-        <font size=24 color=black>Package: <b>UCD_3.0
-    end header
+usecase "**NOT_LOGGED**\nЗареєструватись або авторизуватись" as NL
 
-    title
-        <font size=18 color=black>UC_8. Редагувати конфігурацію порталу
-        <font size=16 color=black>Діаграма прецедентів
-    end title
+Guest-r-> NL
 
+usecase "**GUEST.CREATE_ACC**\nЗареєструватись у системі" as REG
+usecase "**GUEST.LOGIN**\nАвторизуватись у системі" as AUTH
 
-    actor "Користувач" as User #eeeeaa
-    
-    package UCD_1{
-        usecase "<b>UC_1</b>\nПереглянути список \nзвітів" as UC_1 #aaeeaa
-    }
-    
-    usecase "<b>UC_1.1</b>\nЗастосувати фільтр" as UC_1.1
-    usecase "<b>UC_1.2</b>\nПереглянути метадані \nзвіту" as UC_1.2  
-    usecase "<b>UC_1.2.1</b>\nДати оцінку звіту" as UC_1.2.1  
-    usecase "<b>UC_1.2.2</b>\nПереглянути інформацію \nпро авторів звіту" as UC_1.2.2
-    
-    package UCD_1 {
-        usecase "<b>UC_4</b>\nВикликати звіт" as UC_4 #aaeeaa
-    }
-    
-    usecase "<b>UC_1.1.1</b>\n Використати \nпошукові теги" as UC_1.1.1  
-    usecase "<b>UC_1.1.2</b>\n Використати \nрядок пошуку" as UC_1.1.2
-    usecase "<b>UC_1.1.3</b>\n Використати \nавторів" as UC_1.1.3  
-    
-    
-    
-    User -> UC_1
-    UC_1.1 .u.> UC_1 :extends
-    UC_1.2 .u.> UC_1 :extends
-    UC_4 .d.> UC_1.2 :extends
-    UC_1.2 .> UC_1.2 :extends
-    UC_1.2.1 .u.> UC_1.2 :extends
-    UC_1.2.2 .u.> UC_1.2 :extends
-    UC_1 ..> UC_1.2.2 :extends
-    
-    
-    UC_1.1.1 -u-|> UC_1.1
-    UC_1.1.2 -u-|> UC_1.1
-    UC_1.1.3 -u-|> UC_1.1
-    
-    right footer
-        Аналітичний портал. Модель прецедентів.
-        НТУУ КПІ ім.І.Сікорського
-        Киів-2020
-    end footer
-
+NL .u.> REG : extends
+NL .u.> AUTH : extends
 @enduml
 
-**Діаграма прецедентів**
-
 </center>
-```
-
-яка буде відображена наступним чином
-
+<br>
+**Схеми використання для зареєстрованого користувача**
 <center style="
     border-radius:4px;
     border: 1px solid #cfd7e6;
@@ -89,61 +68,54 @@
 >
 
 @startuml
+actor User
 
-    right header
-        <font size=24 color=black>Package: <b>UCD_3.0
-    end header
+usecase "**AUTHORIZED_USER**\nОтримати та пройти опитування" as U
 
-    title
-        <font size=18 color=black>UC_8. Редагувати конфігурацію порталу
-        <font size=16 color=black>Діаграма прецедентів
-    end title
+User -r-> U
 
+usecase "**USER.GET_QUIZ**\nОтримати дані для проходження опитування" as GET
+usecase "**USER.ANSWER**\nНадіслати дані про проходження опитування" as SEND
+usecase "**USER.DELETE_ACC**\nМожливість видалити акаунт" as GET_REVIEW
 
-    actor "Користувач" as User #eeeeaa
-    
-    package UCD_1{
-        usecase "<b>UC_1</b>\nПереглянути список \nзвітів" as UC_1 #aaeeaa
-    }
-    
-    usecase "<b>UC_1.1</b>\nЗастосувати фільтр" as UC_1.1
-    usecase "<b>UC_1.2</b>\nПереглянути метадані \nзвіту" as UC_1.2  
-    usecase "<b>UC_1.2.1</b>\nДати оцінку звіту" as UC_1.2.1  
-    usecase "<b>UC_1.2.2</b>\nПереглянути інформацію \nпро авторів звіту" as UC_1.2.2
-    
-    package UCD_1 {
-        usecase "<b>UC_4</b>\nВикликати звіт" as UC_4 #aaeeaa
-    }
-    
-    usecase "<b>UC_1.1.1</b>\n Використати \nпошукові теги" as UC_1.1.1  
-    usecase "<b>UC_1.1.2</b>\n Використати \nрядок пошуку" as UC_1.1.2
-    usecase "<b>UC_1.1.3</b>\n Використати \nавторів" as UC_1.1.3  
-    
-    
-    
-    User -> UC_1
-    UC_1.1 .u.> UC_1 :extends
-    UC_1.2 .u.> UC_1 :extends
-    UC_4 .d.> UC_1.2 :extends
-    UC_1.2 .> UC_1.2 :extends
-    UC_1.2.1 .u.> UC_1.2 :extends
-    UC_1.2.2 .u.> UC_1.2 :extends
-    UC_1 ..> UC_1.2.2 :extends
-    
-    
-    UC_1.1.1 -u-|> UC_1.1
-    UC_1.1.2 -u-|> UC_1.1
-    UC_1.1.3 -u-|> UC_1.1
-    
-    right footer
-        Аналітичний портал. Модель прецедентів.
-        НТУУ КПІ ім.І.Сікорського
-        Киів-2020
-    end footer
-
+U .u.> GET : extends
+U .u.> SEND : extends
+U .d.> GET_REVIEW : extends
 @enduml
 
-**Діаграма прецедентів**
-
 </center>
+<br>
+**Схеми використання для інтерв'юєра**
+<center style="
+    border-radius:4px;
+    border: 1px solid #cfd7e6;
+    box-shadow: 0 1px 3px 0 rgba(89,105,129,.05), 0 1px 1px 0 rgba(0,0,0,.025);
+    padding: 1em;"
+>
 
+@startuml
+actor Interviewer
+
+usecase "**GROUP**\nСтворити та редагувати групу\nСтворити та редагувати опитування" as O
+
+Interviewer -r-> O
+
+usecase "**INT.CREATE_GROUP **\nСтворити групу" as CREAT
+usecase "**INT.DELETE_GROUP**\nВидалити групу" as DELETE
+usecase "**INT.ADD_MEMBER **\nДодати учасника до групи" as ADD
+usecase "**INT.CREATE_QUIZ  **\nСтворити опитування" as CREATE_QUIZ
+usecase "**INT.EDIT_QUIZ**\nЗмінити дані про опитування" as EDIT_QUIZ
+usecase "**INT.GET_RES**\nОтримати результати опитування" as GET_RES
+usecase "**INT.DELETE_MEMBER**\nВидалити учасника з нрупи" as DELETE_MEMBER
+usecase "**INT.DELETE_QUIZ**\nВидалити опитування" as DELETE_QUIZ
+
+O .u.> CREAT : extends
+O .u.> DELETE : extends
+O .u.> ADD: extends
+O .r.> CREATE_QUIZ : extends
+O .d.> EDIT_QUIZ : extends
+O .d.> GET_RES : extends
+O .d.> DELETE_MEMBER: extends
+O .d.> DELETE_QUIZ: extends
+@enduml
+</center>
