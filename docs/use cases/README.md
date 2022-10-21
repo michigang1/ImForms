@@ -1,121 +1,90 @@
-# Модель прецедентів
-
-В цьому файлі необхідно перелічити всі документи, розроблені в проекті та дати посилання на них.
-
-*Модель прецедентів повинна містити загальні оглядові діаграми та специфікації прецедентів.*
-
-
-
-Вбудовування зображень діаграм здійснюється з використанням сервісу [plantuml.com](https://plantuml.com/). 
+В даному файлі наведені графічні діаграми що відображують бізнес процеси.
+Вбудовування зображень діаграм здійснюється з використанням сервісу [plantuml.com](https://plantuml.com/).
 
 В markdown-файлі використовується опис діаграми
 
-**Діаграма прецедентів**
+## Діаграма прецедентів
 
-<center style="
-    border-radius:4px;
-    border: 1px solid #cfd7e6;
-    box-shadow: 0 1px 3px 0 rgba(89,105,129,.05), 0 1px 1px 0 rgba(0,0,0,.025);
-    padding: 1em;"
->
 @startuml
 actor Guest
 actor User
 actor Interviewer
+
+usecase "<b>GUEST\nЗареєструватись та авторизуватись" as G
+usecase "<b>USER\nОтримати та пройти опитування" as U
+usecase "<b>INTERVIEWER\nСтворити та редагувати опитування\nСтворити та редагувати експертну групу" as I
 
 User -u-|> Guest
-Interviewer-u-|> User
+Interviewer -u-|> User
 
-usecase "**NOT_LOGGED**\nЗареєструватись та авторизуватись" as NL
-usecase "**LOGGED**\nОтримати та пройти опитування" as U
-usecase "**GROUP**\nСтворити та редагувати організацію\nСтворити, аналізувати та редагувати опитування" as O
-Guest -r-> NL
-User -r-> U
-Interviewer -r-> O
+Guest -> G
+User -> U
+Interviewer -> I
 @enduml
-</center>
-<br>
-**Схеми використання для незареєстрованого користувача**
-<center style="
-    border-radius:4px;
-    border: 1px solid #cfd7e6;
-    box-shadow: 0 1px 3px 0 rgba(89,105,129,.05), 0 1px 1px 0 rgba(0,0,0,.025);
-    padding: 1em;"
->
+
+## Схеми використання для користувача
 
 @startuml
 actor Guest
 
-usecase "**NOT_LOGGED**\nЗареєструватись або авторизуватись" as NL
+usecase "<b>GUEST\nЗареєструватись та авторизуватись" as G
+usecase "<b>GUEST.CREATE_ACC\nЗареєструвати користувача" as GC
+usecase "<b>GUEST.LOGIN\nАвторизувати користувача" as GL
+Guest -r-> G
 
-Guest-r-> NL
-
-usecase "**GUEST.CREATE_ACC**\nЗареєструватись у системі" as REG
-usecase "**GUEST.LOGIN**\nАвторизуватись у системі" as AUTH
-
-NL .u.> REG : extends
-NL .u.> AUTH : extends
+G .u.> GL
+G .u.> GC
 @enduml
 
-</center>
-<br>
-**Схеми використання для зареєстрованого користувача**
-<center style="
-    border-radius:4px;
-    border: 1px solid #cfd7e6;
-    box-shadow: 0 1px 3px 0 rgba(89,105,129,.05), 0 1px 1px 0 rgba(0,0,0,.025);
-    padding: 1em;"
->
+## Схеми використання для авторизованого користувача
 
 @startuml
 actor User
 
-usecase "**AUTHORIZED_USER**\nОтримати та пройти опитування" as U
+usecase "<b>USER\nОтримати та пройти опитування" as U
+
+usecase "<b>USER.ANSWER\nВідправити заповнену анкету" as UA
+usecase "<b>USER.GET_QUIZ\nОтримання опитування" as UG
+usecase "<b>USER.DELETE_ACC\nВидалити свій акаунт" as UD
 
 User -r-> U
 
-usecase "**USER.GET_QUIZ**\nОтримати дані для проходження опитування" as GET
-usecase "**USER.ANSWER**\nНадіслати дані про проходження опитування" as SEND
-usecase "**USER.DELETE_ACC**\nМожливість видалити акаунт" as GET_REVIEW
-
-U .u.> GET : extends
-U .u.> SEND : extends
-U .d.> GET_REVIEW : extends
+U .u.> UA
+U .u.> UG
+U .d.> UD
 @enduml
 
-</center>
-<br>
-**Схеми використання для інтерв'юєра**
-<center style="
-    border-radius:4px;
-    border: 1px solid #cfd7e6;
-    box-shadow: 0 1px 3px 0 rgba(89,105,129,.05), 0 1px 1px 0 rgba(0,0,0,.025);
-    padding: 1em;"
->
+## Схеми використання для інтервьюєра
 
 @startuml
 actor Interviewer
 
-usecase "**GROUP**\nСтворити та редагувати групу\nСтворити та редагувати опитування" as O
+usecase "<b>INTERVIEWER\nСтворити та редагувати опитування\nСтворити та редагувати експертну групу" as I
 
-Interviewer -r-> O
+usecase "<b>INT.CREATE_QUIZ\nСтворити опитування" as ICQ
+usecase "<b>INT.DELETE_QUIZ\nВидалити опитування" as IDQ
+usecase "<b>INT.EDIT_QUIZ\nВнести зміни в існуюче опитування" as IEQ
 
-usecase "**INT.CREATE_GROUP **\nСтворити групу" as CREAT
-usecase "**INT.DELETE_GROUP**\nВидалити групу" as DELETE
-usecase "**INT.ADD_MEMBER **\nДодати учасника до групи" as ADD
-usecase "**INT.CREATE_QUIZ  **\nСтворити опитування" as CREATE_QUIZ
-usecase "**INT.EDIT_QUIZ**\nЗмінити дані про опитування" as EDIT_QUIZ
-usecase "**INT.GET_RES**\nОтримати результати опитування" as GET_RES
-usecase "**INT.DELETE_MEMBER**\nВидалити учасника з нрупи" as DELETE_MEMBER
-usecase "**INT.DELETE_QUIZ**\nВидалити опитування" as DELETE_QUIZ
+usecase "<b>INT.ADD_MEMBER\nЗапросити учасника до групи" as IAM
+usecase "<b>INT.DELETE_MEMBER\nВидалити учасника з групи" as IDM
+usecase "<b>INT.GET_RES\nОтримати результати опитування" as IGR
 
-O .u.> CREAT : extends
-O .u.> DELETE : extends
-O .u.> ADD: extends
-O .r.> CREATE_QUIZ : extends
-O .d.> EDIT_QUIZ : extends
-O .d.> GET_RES : extends
-O .d.> DELETE_MEMBER: extends
-O .d.> DELETE_QUIZ: extends
+usecase "<b>INT.CREATE_GROUP\nСтворити групу" as ICG
+usecase "<b>INT.GET_GROUP\nОтримати інформацію про групу" as IGG
+usecase "<b>INT.DELETE_GROUP\nВидалити групу" as IDG
+
+Interviewer -r-> I
+
+I .u.> ICQ
+I .u.> IDQ
+I .u.> IEQ
+
+I .r.> IDM
+I .r.> IAM
+I .d.> IGR
+
+I .d.> ICG
+I .d.> IGG
+I .d.> IDG
+
 @enduml
-</center>
