@@ -7,22 +7,34 @@
 
 ### На **рис. 1.1** зображена **ієрархія прецедентів** та їх основні можливості.
 
+<center>
 @startuml
-actor Guest
-actor User
-actor Interviewer
-
-usecase "<b>GUEST\nЗареєструватись та авторизуватись" as G
-usecase "<b>USER\nОтримати та пройти опитування" as U
-usecase "<b>INTERVIEWER\nСтворити та редагувати опитування\nСтворити та редагувати експертну групу" as I
-
-User -u-|> Guest
-Interviewer -u-|> User
-
-Guest -> G
-User -> U
-Interviewer -> I
+  actor Guest
+  actor User
+  actor Interviewer
+  
+  usecase "Авторизуватись" as GA
+  usecase "Зареєструватись" as GR
+  
+  usecase "Робота з опитуванням" as UO #palegreen
+  usecase "Видалити акаунт" as UD
+  
+  usecase "Управляти опитуванням" as IO #palegreen
+  usecase "Управляти експертною групою" as IG #palegreen
+  
+  User -u-|> Guest
+  Interviewer -u-|> User
+  
+  Guest -l-> GA
+  Guest -r-> GR
+  
+  User -l-> UD
+  User -r-> UO
+  
+  Interviewer -l-> IO
+  Interviewer -r-> IG
 @enduml
+</center>
 
 **Рис. 1.1** Ієрархія прецедентів.
 
@@ -32,17 +44,17 @@ Interviewer -> I
 
 ### На **рис. 2.1** зображені **усі можливості незареєстрованого користувача**.
 
+<center>
 @startuml
-actor Guest
-
-usecase "<b>GUEST\nЗареєструватись та авторизуватись" as G
-usecase "<b>GUEST.CREATE_ACC\nЗареєструвати користувача" as GC
-usecase "<b>GUEST.LOGIN\nАвторизувати користувача" as GL
-Guest -r-> G
-
-G .u.> GL
-G .u.> GC
+  actor Guest
+  
+  usecase "Зареєструватсь" as GR
+  usecase "Авторизуватись" as GA
+  
+  Guest -u-> GR
+  Guest -u-> GA
 @enduml
+</center>
 
 **Рис. 2.1.** Усі можливості незареєстрованого користувача.
 
@@ -52,21 +64,24 @@ G .u.> GC
 
 ### На **рис. 3.1** зображені **усі можливості зареєстрованого користувача**.
 
+<center>
 @startuml
-actor User
+  actor User
+  
+  usecase "Робота з опитуванням" as UO #palegreen
+  
+  usecase "Отримання опитування" as UG
+  usecase "Відправити заповнену анкету" as US
 
-usecase "<b>USER\nОтримати та пройти опитування" as U
-
-usecase "<b>USER.ANSWER\nВідправити заповнену анкету" as UA
-usecase "<b>USER.GET_QUIZ\nОтримати опитування" as UG
-usecase "<b>USER.DELETE_ACC\nВидалити свій акаунт" as UD
-
-User -r-> U
-
-U .u.> UA
-U .u.> UG
-U .d.> UD
+  usecase "Видалити акаунт" as UD
+  
+  User -u-> UO
+  User -d-> UD
+  
+  UG .d.> UO :extends
+  US .d.> UO :extends
 @enduml
+</center>
 
 **Рис. 3.1.** Усі можливості зареєстрованого користувача.
 
@@ -76,38 +91,39 @@ U .d.> UD
 
 ### На **рис. 4.1** зображені **усі можливості інтерв'юера**.
 
+<center>
 @startuml
-actor Interviewer
-
-usecase "<b>INTERVIEWER\nСтворити та редагувати опитування\nСтворити та редагувати експертну групу" as I
-
-usecase "<b>INT.CREATE_QUIZ\nСтворити опитування" as ICQ
-usecase "<b>INT.DELETE_QUIZ\nВидалити опитування" as IDQ
-usecase "<b>INT.EDIT_QUIZ\nВнести зміни в існуюче опитування" as IEQ
-
-usecase "<b>INT.ADD_MEMBER\nЗапросити учасника до групи" as IAM
-usecase "<b>INT.DELETE_MEMBER\nВидалити учасника з групи" as IDM
-usecase "<b>INT.GET_RES\nОтримати результати опитування" as IGR
-
-usecase "<b>INT.CREATE_GROUP\nСтворити групу" as ICG
-usecase "<b>INT.GET_GROUP\nОтримати інформацію про групу" as IGG
-usecase "<b>INT.DELETE_GROUP\nВидалити групу" as IDG
-
-Interviewer -r-> I
-
-I .u.> ICQ
-I .u.> IDQ
-I .u.> IEQ
-
-I .r.> IDM
-I .r.> IAM
-I .d.> IGR
-
-I .d.> ICG
-I .d.> IGG
-I .d.> IDG
-
+  actor Interviewer
+  
+  usecase "Управляти опитуванням" as IO #palegreen
+  usecase "Управляти експертною групою" as IG #palegreen
+  
+  usecase "Створити опитування" as OC
+  usecase "Внести зміни в опитування" as OE
+  usecase "Отримати результати опитування" as OG
+  usecase "Видалити опитування" as OD 
+  
+  usecase "Створити групу" as GC
+  usecase "Запросити учасника до групи" as GMI
+  usecase "Видалити учасника з групи" as GMD
+  usecase "Отримати інформацію про групу" as GI 
+  usecase "Видалити групу" as GD
+  
+  Interviewer -u-> IO
+  Interviewer -d-> IG
+  
+  OC .d.> IO :extends
+  OE .d.> IO :extends
+  OG .d.> IO :extends
+  OD .d.> IO :extends
+  
+  GC .u.> IG :extends
+  GMI .u.> IG :extends
+  GMD .u.> IG :extends
+  GI .u.> IG :extends
+  GD .u.> IG :extends
 @enduml
+</center>
 
 **Рис. 4.1.** Усі можливості інтерв'юера.
 
