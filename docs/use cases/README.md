@@ -7,9 +7,10 @@
 
 ### На **рис. 1.1** зображена **ієрархія прецедентів** та їх основні можливості.
 
-<center>
-@startuml
-  actor Guest
+<center> 
+  
+@startuml  
+  actor Guest  
   actor User
   actor Interviewer
   
@@ -42,10 +43,11 @@
 ## 2) Схеми використання для користувача:
 
 ### На **рис. 2.1** зображені **усі можливості незареєстрованого користувача**.
-
-<center>
-@startuml
-  actor Guest
+  
+<center>  
+    
+@startuml  
+  actor Guest  
   
   usecase "Зареєструватсь" as GR
   usecase "Авторизуватись" as GA
@@ -61,10 +63,11 @@
 ## 3) Схеми використання для авторизованого користувача:
 
 ### На **рис. 3.1** зображені **усі можливості зареєстрованого користувача**.
-
-<center>
-@startuml
-  actor User
+  
+<center>  
+    
+@startuml  
+  actor User  
   
   usecase "Робота з опитуванням" as UO #palegreen
   
@@ -87,10 +90,11 @@
 ## 4) Схеми використання для інтерв'юера:
 
 ### На **рис. 4.1** зображені **усі можливості інтерв'юера**.
-
-<center>
-@startuml
-  actor Interviewer
+  
+<center>  
+  
+@startuml  
+  actor Interviewer  
   
   usecase "Управляти опитуванням" as IO #palegreen
   usecase "Управляти експертною групою" as IG #palegreen
