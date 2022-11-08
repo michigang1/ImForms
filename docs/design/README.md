@@ -26,7 +26,6 @@ entity Quiz.Description
 entity Quiz.End_Date
 entity Quiz.Link
 entity Quiz.Data
-entity QuizResult #eeffff
 
 entity Question #eeffff
 entity Question.Name
@@ -34,14 +33,17 @@ entity Question.ID
 entity Question.Description
 
 entity Respondent
+
 entity Interviewer
+
+entity QuizResult #eeffff
 
 User.Name --* User
 User.Email -r-* User
 User.Password -l-* User
 User.Authorization_Token -u-* User
 Group *-- User
-Quiz*--* User
+Quiz*-- User
 Quiz --* Group
 User.Role --* User
 
@@ -68,6 +70,8 @@ Question --* Quiz
 
 Respondent --* User.Role
 Interviewer --* User.Role
+User --* Group.Creator
+QuizResult --* Respondent
 @enduml
 </center>
 - ER-модель
