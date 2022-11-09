@@ -74,6 +74,7 @@ User --* Group.Creator
 QuizResult --* Respondent
 @enduml
 </center>
+
 - ER-модель   
 <center>   
 @startuml   
