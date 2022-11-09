@@ -74,6 +74,53 @@ User --* Group.Creator
 QuizResult --* Respondent
 @enduml
 </center>
-- ER-модель
+- ER-модель   
+<center>   
+@startuml   
+    entity Group {
+    Creator: TEXT 
+    Name: TEXT 
+    Description: TEXT 
+    Picture: IMAGE
+    ID: TEXT 
+    }  
+    entity User {
+    Name: TEXT 
+    Email: TEXT 
+    Creator: TEXT 
+    Authorization_Token: TEXT 
+    Password: TEXT 
+    }  
+    entity User.Role {
+    Respondent: TEXT
+    Interviewer: TEXT
+    }  
+    entity Quiz {
+    Name: TEXT 
+    Description: TEXT 
+    ID: TEXT 
+    Link: TEXT 
+    End_Date: DATE
+    Qwestion_list: TEXT 
+    }  
+    entity Question {
+    Name: TEXT 
+    ID: TEXT 
+    Description: TEXT 
+    }  
+    entity QuizResult {
+    Data: DATA
+    Respondent: TEXT
+    Interviewer: TEXT
+    }  
+    
+    Question --* Quiz
+    QuizResult --* Quiz
+    Quiz --* Group
+    Quiz -- User
+    Group -- User
+    User.Role --* User   
+@enduml   
+</center>   
 - реляційна схема
 
