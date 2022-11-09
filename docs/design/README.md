@@ -77,25 +77,25 @@ QuizResult --* Respondent
 - ER-модель   
 <center>   
 @startuml   
-    entity Group {
+    entity Group <<ENTITY>>{
     Creator: TEXT 
     Name: TEXT 
     Description: TEXT 
     Picture: IMAGE
     ID: TEXT 
     }  
-    entity User {
+    entity User <<ENTITY>>{
     Name: TEXT 
     Email: TEXT 
     Creator: TEXT 
     Authorization_Token: TEXT 
     Password: TEXT 
     }  
-    entity User.Role {
+    entity User.Role <<ENTITY>>{
     Respondent: TEXT
     Interviewer: TEXT
     }  
-    entity Quiz {
+    entity Quiz <<ENTITY>>{
     Name: TEXT 
     Description: TEXT 
     ID: TEXT 
@@ -103,12 +103,12 @@ QuizResult --* Respondent
     End_Date: DATE
     Qwestion_list: TEXT 
     }  
-    entity Question {
+    entity Question <<ENTITY>>{
     Name: TEXT 
     ID: TEXT 
     Description: TEXT 
     }  
-    entity QuizResult {
+    entity QuizResult <<ENTITY>>{
     Data: DATA
     Respondent: TEXT
     Interviewer: TEXT
