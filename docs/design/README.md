@@ -1,22 +1,26 @@
 # Проєктування бази даних
 
 В рамках проекту розробляється: 
-- модель бізнес-об'єктів 
-<center>
-@startuml
+- модель бізнес-об'єктів  
+
+<center>  
+
+@startuml  
+
 entity User #eeffff
 entity User.Name 
 entity User.Email
 entity User.Password
 entity User.Authorization_Token
-entity User.Role #eeffff
+entity User.Photo
 
 entity Group #eeffff
 entity Group.Name
 entity Group.ID
 entity Group.Creator
 entity Group.Description
-entity Picture
+
+entity QuizResult #eeffff
 
 entity Quiz  #eeffff
 entity Quiz.ID
@@ -25,33 +29,35 @@ entity Quiz.Qwestion_list
 entity Quiz.Description
 entity Quiz.End_Date
 entity Quiz.Link
-entity Quiz.Data
+entity QuizResult.Data 
 
 entity Question #eeffff
 entity Question.Name
 entity Question.ID
 entity Question.Description
 
-entity Respondent
+object Respondent #ffffff
 
-entity Interviewer
-
-entity QuizResult #eeffff
+object Interviewer #ffffff
 
 User.Name --* User
 User.Email -r-* User
 User.Password -l-* User
 User.Authorization_Token -u-* User
-Group *-- User
-Quiz*-- User
+User.Photo --* User
+
+Group "0,*" -- "0,*" User : Respondent 
+User "1,1" -- "0,*" Group  : Interviewer 
+
+
+Quiz "0,*" -- "0,*" User : Respondent 
+User "1,1" -- "0,*" Quiz  : Interviewer 
 Quiz --* Group
-User.Role --* User
 
 Group.Name -l-* Group
 Group.ID -r-* Group
 Group.Creator --* Group
 Group.Description --* Group
-Picture --* Group
 
 Quiz.ID --* Quiz
 Quiz.Name -l-* Quiz
@@ -59,20 +65,20 @@ Quiz.Qwestion_list -r-* Quiz
 Quiz.Description -u-* Quiz
 Quiz.End_Date --* Quiz
 Quiz.Link --* Quiz
+
 QuizResult --* Quiz
-QuizResult --* Interviewer 
-Quiz.Data --* QuizResult
+QuizResult.Data --* QuizResult
 
 Question.Name --* Question
 Question.ID --* Question
 Question.Description --* Question
 Question --* Quiz
 
-Respondent --* User.Role
-Interviewer --* User.Role
-User --* Group.Creator
-QuizResult --* Respondent
-@enduml
+Respondent --|> User
+Interviewer --|> User  
+
+@enduml  
+
 </center>
 
 - ER-модель   
