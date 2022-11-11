@@ -87,50 +87,56 @@ Interviewer --|> User
 - ER-модель   
 <center>   
 @startuml   
-    entity Group <<ENTITY>>{
+entity Group <<ENTITY>>{
     Creator: TEXT 
     Name: TEXT 
     Description: TEXT 
-    Picture: IMAGE
-    ID: TEXT 
-    }  
-    entity User <<ENTITY>>{
+    ID: TEXT
+    Quiz_List: TEXT 
+    Members_List: TEXT 
+} 
+
+object Respondent #ffffff
+
+object Interviewer #ffffff
+ 
+entity User <<ENTITY>>{
     Name: TEXT 
     Email: TEXT 
-    Creator: TEXT 
     Authorization_Token: TEXT 
     Password: TEXT 
-    }  
-    entity User.Role <<ENTITY>>{
-    Respondent: TEXT
-    Interviewer: TEXT
-    }  
-    entity Quiz <<ENTITY>>{
+}  
+  
+entity Quiz <<ENTITY>>{
     Name: TEXT 
     Description: TEXT 
     ID: TEXT 
     Link: TEXT 
     End_Date: DATE
     Qwestion_list: TEXT 
-    }  
-    entity Question <<ENTITY>>{
+} 
+ 
+entity Question <<ENTITY>>{
     Name: TEXT 
     ID: TEXT 
-    Description: TEXT 
-    }  
-    entity QuizResult <<ENTITY>>{
-    Data: DATA
-    Respondent: TEXT
-    Interviewer: TEXT
-    }  
+    Description: TEXT
+    Answer_Variants: TEXT
+}
+  
+entity QuizResult <<ENTITY>>{
+    Data: TEXT 
+}  
     
-    Question --* Quiz
-    QuizResult --* Quiz
-    Quiz --* Group
-    Quiz -- User
-    Group -- User
-    User.Role --* User   
-@enduml   
+Question --* Quiz
+QuizResult --* Quiz
+Quiz --* Group
+Quiz "0,*" -- "0,*" User : Respondent 
+User "1,1" -- "0,*" Quiz  : Interviewer 
+Group "0,*" -- "0,*" User : Respondent 
+User "1,1" -- "0,*" Group  : Interviewer 
+Respondent --|> User
+Interviewer --|> User  
+@enduml 
 </center>   
 - реляційна схема
 
