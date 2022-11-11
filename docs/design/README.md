@@ -18,7 +18,7 @@ entity Group.Name
 entity Group.ID
 entity Group.Creator
 entity Group.Description
-entity Group.Members
+entity Group.Members_List
 entity Group.Quiz_List
 
 entity QuizResult #eeffff
@@ -30,12 +30,14 @@ entity Quiz.Qwestion_list
 entity Quiz.Description
 entity Quiz.End_Date
 entity Quiz.Link
+
 entity QuizResult.Data 
 
 entity Question #eeffff
 entity Question.Name
 entity Question.ID
 entity Question.Description
+entity Question.Answer_Variants
 
 object Respondent #ffffff
 
@@ -59,8 +61,8 @@ Group.Name -l-* Group
 Group.ID -r-* Group
 Group.Creator --* Group
 Group.Description --* Group
-Group.Members --* Group
 Group.Quiz_List --* Group
+Group.Members_List --* Group
 
 Quiz.ID --* Quiz
 Quiz.Name -l-* Quiz
@@ -75,7 +77,8 @@ QuizResult.Data --* QuizResult
 Question.Name --* Question
 Question.ID --* Question
 Question.Description --* Question
-Question --* Quiz
+Question.Answer_Variants --* Question
+Question --* Quiz 
 
 Respondent --|> User
 Interviewer --|> User
