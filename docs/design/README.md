@@ -60,13 +60,13 @@ Group.Name -l-_ Group
 Group.ID -r-_ Group
 Group.Creator --_ Group
 Group.Description --_ Group
-Group.Quiz_List --_ Group
-Group.Members_List --_ Group
+Group.Quiz*List --* Group
+Group.Members*List --* Group
 
 Quiz.ID -r-_ Quiz
 Quiz.Name -r-_ Quiz
-Quiz.Question_List -r-_ Quiz
-Quiz.End_Date --_ Quiz
+Quiz.Question*List -r-* Quiz
+Quiz.End*Date --* Quiz
 Quiz.Link --_ Quiz
 Quiz.Description -r-_ Quiz
 
@@ -92,6 +92,8 @@ Interviewer --|> User
 
 @startuml
 
+namespace groupManagement {
+
 entity Group <<ENTITY>>{
 Creator: TEXT
 Name: TEXT
@@ -100,6 +102,9 @@ ID: TEXT
 Quiz_List: TEXT
 Members_List: TEXT
 }
+}
+
+namespace UserProfileManagement {
 
 object Respondent #ffffff
 
@@ -110,7 +115,10 @@ Name: TEXT
 Email: TEXT
 Authorization_Token: TEXT
 Password: TEXT
-}
+}  
+ }
+
+namespace quizManagement {
 
 entity Quiz <<ENTITY>>{
 Name: TEXT
@@ -127,20 +135,25 @@ ID: TEXT
 Description: TEXT
 Answer_Variants: TEXT
 }
+}
+
+namespace analize {
 
 entity QuizResult <<ENTITY>>{
 Data: TEXT
 }  
-  
+}
+
 Question --_ Quiz
 QuizResult --_ Quiz
 Quiz --_ Group
-Quiz "0,_" -- "0,_" User : Respondent
-User "1,1" -- "0,_" Quiz : Interviewer
-Group "0,_" -- "0,_" User : Respondent
-User "1,1" -- "0,\*" Group : Interviewer
+Quiz "0,_" -d- "0,_" User : Respondent
+User "1,1" -u- "0,_" Quiz : Interviewer
+Group "0,_" -u- "0,_" User : Respondent
+User "1,1" -d- "0,\*" Group : Interviewer
 Respondent --|> User
-Interviewer --|> User  
+Interviewer --|> User
+
 @enduml
 
 </center>   
