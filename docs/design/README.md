@@ -3,9 +3,8 @@
 В рамках проекту розробляється: 
 - модель бізнес-об'єктів  
 
-<center>  
+@startuml  
 
-@startuml
 entity User #eeffff
 entity User.Name 
 entity User.Email
@@ -19,14 +18,14 @@ entity Group.ID
 entity Group.Creator
 entity Group.Description
 entity Group.Members_List
-entity Group.Quiz_List
+entity Group.Quiz_List  #eeffff
 
 entity QuizResult #eeffff
 
 entity Quiz  #eeffff
 entity Quiz.ID
 entity Quiz.Name
-entity Quiz.Qwestion_list
+entity Quiz.Question_List #eeffff
 entity Quiz.Description
 entity Quiz.End_Date
 entity Quiz.Link
@@ -55,7 +54,7 @@ User "1,1" -- "0,*" Group  : Interviewer
 
 Quiz "0,*" -- "0,*" User : Respondent 
 User "1,1" -- "0,*" Quiz  : Interviewer 
-Quiz --* Group
+Quiz --* Group.Quiz_List
 
 Group.Name -l-* Group
 Group.ID -r-* Group
@@ -64,12 +63,13 @@ Group.Description --* Group
 Group.Quiz_List --* Group
 Group.Members_List --* Group
 
-Quiz.ID --* Quiz
-Quiz.Name -l-* Quiz
-Quiz.Qwestion_list -r-* Quiz
-Quiz.Description -u-* Quiz
+Quiz.ID -r-* Quiz
+Quiz.Name -r-* Quiz
+Quiz.Question_List -r-* Quiz
 Quiz.End_Date --* Quiz
 Quiz.Link --* Quiz
+Quiz.Description -r-* Quiz
+
 
 QuizResult --* Quiz
 QuizResult.Data --* QuizResult
@@ -78,14 +78,14 @@ Question.Name --* Question
 Question.ID --* Question
 Question.Description --* Question
 Question.Answer_Variants --* Question
-Question --* Quiz 
+Question --* Quiz.Question_List 
 
 Respondent --|> User
-Interviewer --|> User
+Interviewer --|> User  
 
-@enduml
+@enduml  
 
-</center>
+</center>  
 
 - ER-модель   
 <center>   
