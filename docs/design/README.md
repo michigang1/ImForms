@@ -1,12 +1,13 @@
 # Проєктування бази даних
 
-В рамках проекту розробляється: 
-- модель бізнес-об'єктів  
+## модель бізнес-об'єктів
 
-@startuml  
+<center>
+
+@startuml
 
 entity User #eeffff
-entity User.Name 
+entity User.Name
 entity User.Email
 entity User.Password
 entity User.Authorization_Token
@@ -18,11 +19,11 @@ entity Group.ID
 entity Group.Creator
 entity Group.Description
 entity Group.Members_List
-entity Group.Quiz_List  #eeffff
+entity Group.Quiz_List #eeffff
 
 entity QuizResult #eeffff
 
-entity Quiz  #eeffff
+entity Quiz #eeffff
 entity Quiz.ID
 entity Quiz.Name
 entity Quiz.Question_List #eeffff
@@ -30,7 +31,7 @@ entity Quiz.Description
 entity Quiz.End_Date
 entity Quiz.Link
 
-entity QuizResult.Data 
+entity QuizResult.Data
 
 entity Question #eeffff
 entity Question.Name
@@ -42,104 +43,105 @@ object Respondent #ffffff
 
 object Interviewer #ffffff
 
-User.Name --* User
-User.Email -r-* User
-User.Password -l-* User
-User.Authorization_Token -u-* User
-User.Photo --* User
+User.Name --_ User
+User.Email -r-_ User
+User.Password -l-_ User
+User.Authorization_Token -u-_ User
+User.Photo --\* User
 
-Group "0,*" -- "0,*" User : Respondent 
-User "1,1" -- "0,*" Group  : Interviewer 
+Group "0,_" -- "0,_" User : Respondent
+User "1,1" -- "0,\*" Group : Interviewer
 
+Quiz "0,_" -- "0,_" User : Respondent
+User "1,1" -- "0,_" Quiz : Interviewer
+Quiz --_ Group.Quiz_List
 
-Quiz "0,*" -- "0,*" User : Respondent 
-User "1,1" -- "0,*" Quiz  : Interviewer 
-Quiz --* Group.Quiz_List
+Group.Name -l-_ Group
+Group.ID -r-_ Group
+Group.Creator --_ Group
+Group.Description --_ Group
+Group.Quiz_List --_ Group
+Group.Members_List --_ Group
 
-Group.Name -l-* Group
-Group.ID -r-* Group
-Group.Creator --* Group
-Group.Description --* Group
-Group.Quiz_List --* Group
-Group.Members_List --* Group
+Quiz.ID -r-_ Quiz
+Quiz.Name -r-_ Quiz
+Quiz.Question_List -r-_ Quiz
+Quiz.End_Date --_ Quiz
+Quiz.Link --_ Quiz
+Quiz.Description -r-_ Quiz
 
-Quiz.ID -r-* Quiz
-Quiz.Name -r-* Quiz
-Quiz.Question_List -r-* Quiz
-Quiz.End_Date --* Quiz
-Quiz.Link --* Quiz
-Quiz.Description -r-* Quiz
+QuizResult --_ Quiz
+QuizResult.Data --_ QuizResult
 
-
-QuizResult --* Quiz
-QuizResult.Data --* QuizResult
-
-Question.Name --* Question
-Question.ID --* Question
-Question.Description --* Question
-Question.Answer_Variants --* Question
-Question --* Quiz.Question_List 
+Question.Name --_ Question
+Question.ID --_ Question
+Question.Description --_ Question
+Question.Answer_Variants --_ Question
+Question --\* Quiz.Question_List
 
 Respondent --|> User
-Interviewer --|> User  
+Interviewer --|> User
 
-@enduml  
+@enduml
 
-</center>  
+</center>
 
-- ER-модель   
-<center>   
-@startuml   
+## ER-модель
+
+<center>
+
+@startuml
+
 entity Group <<ENTITY>>{
-    Creator: TEXT 
-    Name: TEXT 
-    Description: TEXT 
-    ID: TEXT
-    Quiz_List: TEXT 
-    Members_List: TEXT 
-} 
+Creator: TEXT
+Name: TEXT
+Description: TEXT
+ID: TEXT
+Quiz_List: TEXT
+Members_List: TEXT
+}
 
 object Respondent #ffffff
 
 object Interviewer #ffffff
- 
+
 entity User <<ENTITY>>{
-    Name: TEXT 
-    Email: TEXT 
-    Authorization_Token: TEXT 
-    Password: TEXT 
-}  
-  
-entity Quiz <<ENTITY>>{
-    Name: TEXT 
-    Description: TEXT 
-    ID: TEXT 
-    Link: TEXT 
-    End_Date: DATE
-    Qwestion_list: TEXT 
-} 
- 
-entity Question <<ENTITY>>{
-    Name: TEXT 
-    ID: TEXT 
-    Description: TEXT
-    Answer_Variants: TEXT
+Name: TEXT
+Email: TEXT
+Authorization_Token: TEXT
+Password: TEXT
 }
-  
+
+entity Quiz <<ENTITY>>{
+Name: TEXT
+Description: TEXT
+ID: TEXT
+Link: TEXT
+End_Date: DATE
+Qwestion_list: TEXT
+}
+
+entity Question <<ENTITY>>{
+Name: TEXT
+ID: TEXT
+Description: TEXT
+Answer_Variants: TEXT
+}
+
 entity QuizResult <<ENTITY>>{
-    Data: TEXT 
+Data: TEXT
 }  
-    
-Question --* Quiz
-QuizResult --* Quiz
-Quiz --* Group
-Quiz "0,*" -- "0,*" User : Respondent 
-User "1,1" -- "0,*" Quiz  : Interviewer 
-Group "0,*" -- "0,*" User : Respondent 
-User "1,1" -- "0,*" Group  : Interviewer 
+  
+Question --_ Quiz
+QuizResult --_ Quiz
+Quiz --_ Group
+Quiz "0,_" -- "0,_" User : Respondent
+User "1,1" -- "0,_" Quiz : Interviewer
+Group "0,_" -- "0,_" User : Respondent
+User "1,1" -- "0,\*" Group : Interviewer
 Respondent --|> User
 Interviewer --|> User  
-@enduml 
+@enduml
+
 </center>   
 - реляційна схема
-
