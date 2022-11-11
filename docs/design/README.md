@@ -5,8 +5,7 @@
 
 <center>  
 
-@startuml  
-
+@startuml
 entity User #eeffff
 entity User.Name 
 entity User.Email
@@ -19,6 +18,8 @@ entity Group.Name
 entity Group.ID
 entity Group.Creator
 entity Group.Description
+entity Group.Members
+entity Group.Quiz_List
 
 entity QuizResult #eeffff
 
@@ -58,6 +59,8 @@ Group.Name -l-* Group
 Group.ID -r-* Group
 Group.Creator --* Group
 Group.Description --* Group
+Group.Members --* Group
+Group.Quiz_List --* Group
 
 Quiz.ID --* Quiz
 Quiz.Name -l-* Quiz
@@ -75,9 +78,9 @@ Question.Description --* Question
 Question --* Quiz
 
 Respondent --|> User
-Interviewer --|> User  
+Interviewer --|> User
 
-@enduml  
+@enduml
 
 </center>
 
