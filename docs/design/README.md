@@ -38,6 +38,7 @@ entity Question.Name
 entity Question.ID
 entity Question.Description
 entity Question.Answer_Variants
+entity Question.Type
 
 object Respondent #ffffff
 
@@ -79,7 +80,8 @@ Question.Name --* Question
 Question.ID --* Question
 Question.Description --* Question
 Question.Answer_Variants --* Question
-Question --* Quiz.Question_List 
+Question --* Quiz.Question_List
+Question.Type -r-* Question 
 
 Respondent --|> User
 Interviewer --|> User
