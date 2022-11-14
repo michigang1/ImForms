@@ -2,11 +2,11 @@
 
 ## модель бізнес-об'єктів
 
-<center>
+<center>  
 
 @startuml  
 
-entity User #eeffff
+entity User #eeffff  
 entity User.Name 
 entity User.Email
 entity User.Password
@@ -44,47 +44,46 @@ object Respondent #ffffff
 
 object Interviewer #ffffff
 
-User.Name --* User
+User.Name -u-* User
 User.Email -r-* User
 User.Password -l-* User
 User.Authorization_Token -u-* User
 User.Photo --* User
 
-Group "0,*" -- "0,*" User : Respondent 
-User "1,1" -- "0,*" Group  : Interviewer 
+Group "1,*" --> "0,*" User 
 
 
-Quiz "0,*" -- "0,*" User : Respondent 
-User "1,1" -- "0,*" Quiz  : Interviewer 
-Quiz --* Group.Quiz_List
+Quiz "0,*" <-- "1,1"  Group.Quiz_List
 
 Group.Name -l-* Group
 Group.ID -r-* Group
 Group.Creator --* Group
-Group.Description --* Group
-Group.Quiz_List --* Group
+Group.Description -u-* Group
+Group.Quiz_List "1,1" <-- "1,1" Group
 Group.Members_List --* Group
 
 Quiz.ID -l-* Quiz
 Quiz.Name -r-* Quiz
-Quiz.Question_List -u-* Quiz
+
+Quiz "1,1" --> "1,1"Quiz.Question_List
+
 Quiz.End_Date --* Quiz
 Quiz.Link --* Quiz
 Quiz.Description -r-* Quiz
+Quiz.Question_List "1,1" --> "1,*" Question 
 
 
-QuizResult --* Quiz
+Quiz "1,1" --> "1,1" QuizResult
 QuizResult.Data --* QuizResult
 
-Question.Name --* Question
+Question.Name -l-* Question
 Question.ID --* Question
 Question.Description --* Question
-Question.Answer_Variants --* Question
-Question --* Quiz.Question_List
+Question.Answer_Variants -u-* Question
 Question.Type -r-* Question 
 
 Respondent --|> User
-Interviewer --|> User
+Interviewer --|> User  
 
 @enduml  
 
