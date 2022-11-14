@@ -120,6 +120,7 @@ entity User <<ENTITY>>{
     Email: TEXT 
     Authorization_Token: TEXT 
     Password: TEXT 
+    Photo: IMAGE
 }  
  } 
 
