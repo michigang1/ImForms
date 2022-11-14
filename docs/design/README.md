@@ -115,7 +115,7 @@ object Respondent #ffffff
 object Interviewer #ffffff
  
 
-entity User <<ENTITY>>{
+entity User <<ENTITY>> #ffff00{
     Name: TEXT 
     Email: TEXT 
     Authorization_Token: TEXT 
@@ -152,15 +152,19 @@ entity QuizResult <<ENTITY>>{
 }
 
     
-Question --* Quiz
-QuizResult --* Quiz
-Quiz --* Group
+Question --> Quiz
+QuizResult --> Quiz
+
+Quiz --> Group
 Quiz "0,*" -d- "0,*" User : Respondent 
+
 User "1,1" -u- "0,*" Quiz  : Interviewer 
+User "1,1" -d- "0,*" Group  : Interviewer
+
 Group "0,*" -u- "0,*" User : Respondent 
-User "1,1" -d- "0,*" Group  : Interviewer 
-Respondent --|> User
-Interviewer --|> User  
+
+Respondent ..> User : instanceOf
+Interviewer ..> User : instanceOf  
 
 @enduml  
 
