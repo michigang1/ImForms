@@ -82,8 +82,8 @@ Question.Description --* Question
 Question.Answer_Variants -u-* Question
 Question.Type -r-* Question 
 
-Respondent --|> User
-Interviewer --|> User  
+Respondent ..> User : instanceOf
+Interviewer ..> User : instanceOf 
 
 @enduml  
 
@@ -97,70 +97,72 @@ Interviewer --|> User
 
 namespace groupManagement {
 
-entity Group <<ENTITY>>{
-    Creator: TEXT 
-    Name: TEXT 
-    Description: TEXT 
-    ID: TEXT
-    Quiz_List: TEXT 
-    Members_List: TEXT 
-} 
+    entity Group <<ENTITY>>{
+        Creator: TEXT 
+        Name: TEXT 
+        Description: TEXT 
+        ID: TEXT
+        Members_List: TEXT 
+    }
+    
+    entity Group.Quiz_List <<ENTITY>>{
+    }
 }
 
 namespace UserProfileManagement {
 
-object Respondent #ffffff
-
-object Interviewer #ffffff
- 
-
-entity User <<ENTITY>> #ffff00{
-    Name: TEXT 
-    Email: TEXT 
-    Authorization_Token: TEXT 
-    Password: TEXT 
-    Photo: IMAGE
-}  
- } 
+    object Respondent #ffffff
+    
+    object Interviewer #ffffff
+     
+    
+    entity User <<ENTITY>> #ffff00{
+        Name: TEXT 
+        Email: TEXT 
+        Authorization_Token: TEXT 
+        Password: TEXT 
+        Photo: IMAGE
+    }  
+} 
 
 namespace quizManagement {
 
-entity Quiz <<ENTITY>>{
-    Name: TEXT 
-    Description: TEXT 
-    ID: TEXT 
-    Link: TEXT 
-    End_Date: DATE
-    Qwestion_list: TEXT 
-} 
- 
-entity Question <<ENTITY>>{
-    Name: TEXT 
-    ID: TEXT 
-    Description: TEXT
-    Answer_Variants: TEXT
-    Type: TEXT
-}
+    entity Quiz <<ENTITY>>{
+        Name: TEXT 
+        Description: TEXT 
+        ID: TEXT 
+        Link: TEXT 
+        End_Date: DATE
+    } 
+     
+    entity Question <<ENTITY>>{
+        Name: TEXT 
+        ID: TEXT 
+        Description: TEXT
+        Answer_Variants: TEXT
+        Type: TEXT
+    }
+    entity Quiz.Question_List <<ENTITY>>{
+    }
 }
 
 namespace analize {
 
-entity QuizResult <<ENTITY>>{
-    Data: TEXT 
-}  
+    entity QuizResult <<ENTITY>>{
+        Data: TEXT 
+    }  
 }
 
     
-Question --> Quiz
-QuizResult --> Quiz
+Group "1,*" --d-> "0,*" User
+Group "1,1" --r-> "1,1" Group.Quiz_List
 
-Quiz --> Group
-Quiz "0,*" -d- "0,*" User : Respondent 
+Group.Quiz_List "1,1" --r-> "0,*" Quiz
 
-User "1,1" -u- "0,*" Quiz  : Interviewer 
-User "1,1" -d- "0,*" Group  : Interviewer
+Quiz "1,1" --r-> "1,1" QuizResult
+Quiz "1,1" -d-> "1,1" Quiz.Question_List
 
-Group "0,*" -u- "0,*" User : Respondent 
+Quiz.Question_List "1,1" -d-> "1,*" Question
 
 Respondent ..> User : instanceOf
 Interviewer ..> User : instanceOf  
