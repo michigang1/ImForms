@@ -107,7 +107,6 @@ QuizResult --* Respondent
     Name: TEXT 
     ID: TEXT 
     Description: TEXT 
-    Type: NEXT
     }  
     entity QuizResult <<ENTITY>>{
     Data: DATA
