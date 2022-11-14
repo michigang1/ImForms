@@ -139,6 +139,7 @@ entity Question <<ENTITY>>{
     ID: TEXT 
     Description: TEXT
     Answer_Variants: TEXT
+    Type: TEXT
 }
 }
 
