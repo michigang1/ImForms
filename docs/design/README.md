@@ -4,10 +4,14 @@
 
 <center>  
 
-@startuml  
+@startuml 
+
+entity Role #eeffff
+entity Role.Name
+entity Role.Description
 
 entity User #eeffff   
-entity User.Name 
+entity User.Name
 entity User.Email
 entity User.Authorization_Token
 entity User.Password
@@ -18,8 +22,6 @@ entity Group.Name
 entity Group.ID
 entity Group.Description
 entity Group.Creator
-entity Group.Members_List
-entity Group.Quiz_List  #eeffff
 
 entity QuizResult #eeffff
 
@@ -27,11 +29,10 @@ entity Quiz  #eeffff
 entity Quiz.Name
 entity Quiz.ID
 entity Quiz.Description
-entity Quiz.Question_List #eeffff
 entity Quiz.Link
 entity Quiz.End_Date
 
-entity QuizResult.Data 
+entity QuizResult.Data
 
 entity Question #eeffff
 entity Question.Name
@@ -40,33 +41,40 @@ entity Question.Description
 entity Question.Answer_Variants
 entity Question.Type
 
+entity Access
+
 object Respondent #ffffff
 object Interviewer #ffffff
 
-Group "1,*" -d-> "0,*" User 
-Group "1,1" -r-> "1,1" Group.Quiz_List
-Group.Quiz_List "1,1" -r-> "0,*" Quiz
+Group "0,*" -d-> "0,1" Access : create_group
+Group "1,1" -r-> "0,*" Quiz
+
+Access "0.*" -d-> "1,1" User
+Access "0.*" -d-> "1,1" Role
+
 Quiz "1,1" -r-> "1,1" QuizResult
-Quiz "1,1" -d-> "1,1"Quiz.Question_List
-Quiz.Question_List "1,1" -d-> "1,*" Question
+Quiz "1,1" -d-> "1,*"Question
+Quiz "0,*" -r-> "0,1" Access : create_quiz
+
+Role.Name -u-* Role
+Role.Description -u-* Role
 
 User.Name -u-* User
 User.Email -u-* User
-User.Authorization_Token -u-* User
 User.Password -u-* User
 User.Photo -u-* User
+User.Authorization_Token -r-* User
 
 Group.Name -d-* Group
 Group.ID -d-* Group
 Group.Creator -d-* Group
 Group.Description -d-* Group
-Group.Members_List -d-* Group
 
 Question.Name -u-* Question
 Question.ID -u-* Question
 Question.Description -u-* Question
 Question.Answer_Variants -u-* Question
-Question.Type -u-* Question 
+Question.Type -u-* Question
 
 Quiz.Name -d-* Quiz
 Quiz.ID -d-* Quiz
@@ -76,10 +84,10 @@ Quiz.End_Date -d-* Quiz
 
 QuizResult.Data -l-* QuizResult
 
-Respondent .r.> User : instanceOf
-Interviewer .r.> User : instanceOf     
+Respondent .d.> Role : instanceOf
+Interviewer .r.> Role : instanceOf
 
-@enduml  
+@enduml    
 
 </center>  
 
@@ -89,37 +97,42 @@ Interviewer .r.> User : instanceOf
 
 @startuml   
 
-namespace groupManagement {
+namespace GroupManagement {
 
-    entity Group <<ENTITY>>{
+    entity Group <<ENTITY>> {
         Name: TEXT 
         ID: TEXT
         Description: TEXT 
         Creator: TEXT 
-        Members_List: TEXT 
-    }
-    
-    entity Group.Quiz_List <<ENTITY>>{
     }
 }
 
-namespace UserProfileManagement {
+namespace AccessManagement {
 
     object Respondent #ffffff
     
     object Interviewer #ffffff
-     
-    
-    entity User <<ENTITY>> #ffff00{
+
+    entity Role <<ENTITY>> #ffff00 {
+        Name: TEXT
+        Descritpion: TEXT
+    }
+    entity Access <<ENTITY>> {
+    }
+}
+
+namespace UserManagement {
+
+    entity User <<ENTITY>> {
         Name: TEXT 
         Email: TEXT 
         Authorization_Token: TEXT 
         Password: TEXT 
         Photo: IMAGE
     }  
-} 
+}
 
-namespace quizManagement {
+namespace QuizManagement {
 
     entity Quiz <<ENTITY>>{
         Name: TEXT 
@@ -129,39 +142,41 @@ namespace quizManagement {
         End_Date: DATE
     } 
      
-    entity Question <<ENTITY>>{
-        Name: TEXT 
-        ID: TEXT 
-        Description: TEXT
-        Answer_Variants: TEXT
-        Type: TEXT
-    }
-    entity Quiz.Question_List <<ENTITY>>{
+    namespace QuestionManagement {
+    
+        entity Question <<ENTITY>>{
+            Name: TEXT 
+            ID: TEXT 
+            Description: TEXT
+            Answer_Variants: TEXT
+            Type: TEXT
+        }
     }
 }
 
-namespace analize {
+namespace AnalyseManagement {
 
-    entity QuizResult <<ENTITY>>{
+    entity QuizResult <<ENTITY>> {
         Data: TEXT 
     }  
 }
 
-    
-Group "1,*" --d-> "0,*" User
-Group "1,1" --r-> "1,1" Group.Quiz_List
+Access "0,*" --u-> "1,1" Role
+Access "0,*" --l-> "1,1" User
 
-Group.Quiz_List "1,1" --r-> "0,*" Quiz
+Group "0,*" --d-> "1,1" Access : create_group
+Group "1,1" --d-> "0,*" Quiz
 
-Quiz "1,1" --r-> "1,1" QuizResult
-Quiz "1,1" -d-> "1,1" Quiz.Question_List
+Quiz "1,1" --u-> "1,*" Question
+Quiz "0,*" --l-> "1,1" Access : create_quiz
+Quiz "1,1" --d-> "1,1" QuizResult
 
-Quiz.Question_List "1,1" -d-> "1,*" Question
 
-Respondent ..> User : instanceOf
-Interviewer ..> User : instanceOf  
+Respondent ..> Role : instanceOf
+Interviewer ..> Role : instanceOf
 
-@enduml  
+@enduml    
 
-</center>   
+</center>
+
 - реляційна схема
