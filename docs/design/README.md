@@ -167,10 +167,9 @@ Access "0,*" --l-> "1,1" User
 Group "0,*" --d-> "1,1" Access : create_group
 Group "1,1" --d-> "0,*" Quiz
 
-Quiz "1,1" --u-> "1,*" Question
-Quiz "0,*" --l-> "1,1" Access : create_quiz
-Quiz "1,1" --d-> "1,1" QuizResult
-
+Quiz "1,1"-r-> "0,1" QuizResult
+Quiz  "1,1" -d-> "0,*"Question
+Quiz "0,*" -r-> "0,1" Access : create_quiz
 
 Respondent ..> Role : instanceOf
 Interviewer ..> Role : instanceOf
