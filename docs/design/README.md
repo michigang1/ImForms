@@ -52,8 +52,8 @@ Group "1,1" -r-> "0,*" Quiz
 Access "0.*" -d-> "1,1" User
 Access "0.*" -d-> "1,1" Role
 
-Quiz "1,1" -r-> "1,1" QuizResult
-Quiz "1,1" -d-> "1,*"Question
+Quiz "1,1"-r-> "0,1" QuizResult
+Quiz "1,1" -d-> "0,*" Question
 Quiz "0,*" -r-> "0,1" Access : create_quiz
 
 Role.Name -u-* Role
