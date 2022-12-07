@@ -96,84 +96,138 @@ Interviewer .r.> Role : instanceOf
 <center>  
 
 @startuml   
-
-namespace GroupManagement {
-
-    entity Group <<ENTITY>> {
-        Name: TEXT 
-        ID: TEXT
-        Description: TEXT 
-        Creator: TEXT 
-    }
-}
-
-namespace AccessManagement {
-
-    object Respondent #ffffff
     
-    object Interviewer #ffffff
-
-    entity Role <<ENTITY>> #ffff00 {
-        Name: TEXT
-        Descritpion: TEXT
-    }
-    entity Access <<ENTITY>> {
-    }
+namespace QuestionsContent {    
+ entity Variant {}
+ entity Question {}
+ entity QuestionType {}
+}
+namespace AnswersRecording {
+ entity Selection {}
+ entity Response {}
+}
+namespace RespondentIdentification {
+ entity User {}
+ entity Respondent {}
+ entity Session {}
+}
+namespace AccessControl {
+ entity Quiz {}
+ entity Role {}
+ entity Grant {}
+ entity Group {}
+}
+namespace Journalism {
+ entity Action {}
+ entity ActionType{}
+ entity State {}
 }
 
-namespace UserManagement {
+entity Variant {
+  id: INT
+  title: TEXT
+  helpText: TEXT
+} 
+entity Question {
+  id: INT
+  name: TEXT
+  description: TEXT
+  title: TEXT
+  helpText: TEXT
+  required: BOOLEAN
+  answer_variants: TEXT
+} 
+entity QuestionType <<DICTIONARY>>{
+  id: INT
+  name: TEXT
+  desription: TEXT
+}
+entity Selection {
+} 
+entity Response {
+  id: INT
+  textValue: TEXT
+} 
+entity Session {
+  id: INT
+  startedAt: DATE
+  submitedAt: DATE
+} 
+entity Respondent {
+  id: INT
+  name: TEXT
+  email: TEXT
+} 
+entity User {
+  id: INT
+  name: TEXT
+  email: VARCHAR
+  password: VARCHAR
+  authorization_token: TEXT
+  photo: IMAGE
+} 
+entity Grant {
+} 
+entity Role <<DICTIONARY>>{
+  id: INT
+  name: TEXT
+  desription: TEXT
+} 
 
-    entity User <<ENTITY>> {
-        Name: TEXT 
-        Email: TEXT 
-        Authorization_Token: TEXT 
-        Password: TEXT 
-        Photo: IMAGE
-    }  
+entity Quiz {
+  id: INT
+  name: NEXT
+  title: TEXT
+  description: TEXT
+  link: TEXT
+  end_date: DATE
+} 
+entity Action {
+  actedAt: Date
+} 
+entity ActionType <<DICTIONARY>>{
+  id: INT
+  name: TEXT
+  desription: TEXT
+} 
+entity State <<DICTIONARY>>{
+  id: INT
+  name: TEXT
+  desription: TEXT
+} 
+entity Group {
+  id: INT
+  name: TEXT
+  desription: TEXT
+  creator: TEXT
 }
 
-namespace QuizManagement {
+Selection "0,*" -d-> "1,1" Variant
+Selection "0,*" -r-> "1,1" Response
 
-    entity Quiz <<ENTITY>>{
-        Name: TEXT 
-        ID: TEXT
-        Description: TEXT 
-        Link: TEXT 
-        End_Date: DATE
-    } 
-     
-    namespace QuestionManagement {
-    
-        entity Question <<ENTITY>>{
-            Name: TEXT 
-            ID: TEXT 
-            Description: TEXT
-            Answer_Variants: TEXT
-            Type: TEXT
-        }
-    }
-}
+Variant -d-> Question
 
-namespace AnalyseManagement {
+Question -l-> QuestionType
+Question -r-> Quiz
 
-    entity QuizResult <<ENTITY>> {
-        Data: TEXT 
-    }  
-}
+Response "0,*" -d-> "1,1" Session
 
-Access "0,*" --u-> "1,1" Role
-Access "0,*" --l-> "1,1" User
+Session "0,*" -r-> "1,1" Quiz
+Session "0,*" -d-> "0,1" Respondent
 
-Group "0,*" --d-> "1,1" Access : create_group
-Group "1,1" --d-> "0,*" Quiz
+Respondent "0,1" -r-> "0,1" User
 
-Quiz "1,1"-r-> "0,1" QuizResult
-Quiz  "1,1" -d-> "0,*"Question
-Quiz "0,*" -r-> "0,1" Access : create_quiz
+Grant "0,*" -u-> "1,1" User
+Grant "0,*" -u-> "1,1" Quiz
+Grant "0,*" -d-> "1,1" Role
 
-Respondent ..> Role : instanceOf
-Interviewer ..> Role : instanceOf
+Action "0,*" -u-> "1,1" User
+Action "0,*" -u-> "1,1" Quiz
+Action "0,*" -d-> "1,1" State
+Action "0,*" -d-> "1,1" ActionType
 
+Group "1,1" -u-> "0,*" Quiz    
+   
 @enduml    
 
 </center>
