@@ -6,19 +6,19 @@
 
 @startuml  
 
-entity Variant
-entity Question
-entity QuestionType
-entity Selection
-entity Response
-entity Session
-entity Respondent
-entity User
-entity Grant
-entity Quiz
-entity Action
-entity ActionType
-entity State
+entity Variant #eeffff
+entity Question #eeffff
+entity QuestionType #eeffff
+entity Selection #eeffff
+entity Response #eeffff
+entity Session #eeffff
+entity Respondent #eeffff
+entity User #eeffff
+entity Grant #eeffff
+entity Quiz #eeffff
+entity Action #eeffff
+entity ActionType #eeffff
+entity State #eeffff
 
 entity Role #eeffff
 entity Role.ID
@@ -191,7 +191,7 @@ namespace AccessControl {
  entity Grant {}
  entity Group {}
 }
-namespace Journalism {
+namespace Journaling {
  entity Action {}
  entity ActionType{}
  entity State {}
