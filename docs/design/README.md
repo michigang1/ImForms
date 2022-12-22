@@ -306,4 +306,8 @@ Group "1,1" -u-> "0,*" Quiz
 
 </center>
 
-- реляційна схема
+## реляційна схема  
+
+![](https://user-images.githubusercontent.com/89345760/209243409-d39337d1-b542-413c-a96c-b9d3facfa7ab.png)  
+
+
