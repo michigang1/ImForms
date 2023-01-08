@@ -1,6 +1,7 @@
 package michigang1.me.rest.entity
 
 import jakarta.persistence.*
+import org.springframework.boot.context.properties.bind.DefaultValue
 
 @Entity
 @Table(name = "action_type")
