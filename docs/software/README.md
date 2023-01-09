@@ -137,10 +137,10 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`actionType`
+-- Table `mydb`.`action_type`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`actionType` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `description` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`))
@@ -154,18 +154,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`actions` (
   `id` INT NOT NULL,
   `actedAt` DATETIME NOT NULL,
   `State_id` INT NOT NULL,
-  `actionType_id` INT NOT NULL,
+  `action_type_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_actions_State1_idx` (`State_id` ASC) VISIBLE,
-  INDEX `fk_actions_actionType1_idx` (`actionType_id` ASC) VISIBLE,
+  INDEX `fk_actions_actionType1_idx` (`action_type_id` ASC) VISIBLE,
   CONSTRAINT `fk_actions_State1`
     FOREIGN KEY (`State_id`)
     REFERENCES `mydb`.`State` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_actions_actionType1`
-    FOREIGN KEY (`actionType_id`)
-    REFERENCES `mydb`.`actionType` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

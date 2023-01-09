@@ -13,7 +13,7 @@ class ActionTypeController(
 
 ) {
     @GetMapping("/")
-    fun getAll(): List<ActionTypeDto> = service.getAll()
+    fun getAll(): List<ActionTypeDto>? = service.getAll()
 
     @GetMapping("/{id}", produces = ["application/json"])
     fun getById(@PathVariable("id") id: Int): ActionTypeDto = service.getById(id)

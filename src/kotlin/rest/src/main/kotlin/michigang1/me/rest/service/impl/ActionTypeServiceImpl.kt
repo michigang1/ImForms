@@ -3,6 +3,7 @@ package michigang1.me.rest.service.impl
 import jakarta.transaction.Transactional
 import michigang1.me.rest.dto.ActionTypeDto
 import michigang1.me.rest.entity.ActionTypeEntity
+import michigang1.me.rest.exception.ActionTypeEmptyTableApiException
 import michigang1.me.rest.exception.ActionTypeNotFoundApiException
 import michigang1.me.rest.repository.ActionTypeRepository
 import michigang1.me.rest.service.ActionTypeService
@@ -14,8 +15,9 @@ class ActionTypeServiceImpl(
     private val repository: ActionTypeRepository
 ) : ActionTypeService {
 
-    override fun getAll(): List<ActionTypeDto> {
-        return repository.findAll().map { it.toDto() }
+    override fun getAll(): List<ActionTypeDto>? {
+        val list = repository.findAll().map { it.toDto() }
+        return list.ifEmpty { throw ActionTypeEmptyTableApiException() }
     }
 
     override fun getById(id: Int): ActionTypeDto {

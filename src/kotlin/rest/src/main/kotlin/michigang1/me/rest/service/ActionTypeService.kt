@@ -5,7 +5,7 @@ import michigang1.me.rest.entity.ActionTypeEntity
 
 interface ActionTypeService {
 
-    fun getAll(): List<ActionTypeDto>
+    fun getAll(): List<ActionTypeDto>?
 
     fun getById(id: Int): ActionTypeDto
 
