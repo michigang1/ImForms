@@ -1,7 +1,6 @@
 package michigang1.me.rest.service
 
 import michigang1.me.rest.dto.ActionTypeDto
-import michigang1.me.rest.entity.ActionTypeEntity
 
 interface ActionTypeService {
 

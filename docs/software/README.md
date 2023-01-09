@@ -1,9 +1,9 @@
 # Реалізація інформаційного та програмного забезпечення
 
-В рамках проекту розробляється:  
+## В рамках проекту розробляється:  
 
-## SQL-скрипт для створення на початкового наповнення бази даних  
-```
+### SQL-скрипт для створення на початкового наповнення бази даних  
+```mysql
 -- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
@@ -206,5 +206,218 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 ```
 
-- RESTfull сервіс для управління даними
+### REST-full сервіс для управління даними:
 
+- `application.yml` - файл налаштування **Spring**-сервера та підключення до **MySQl** бази даних:
+```yml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/mydb?useSSL=true
+    username: root
+    password: "12345678"
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: update
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+        temp:
+          use_jdbc_metadata_defaults: false
+```
+
+- `ActionTypeEntity` - ORM-модель таблиці  `action_type` у базі даних `mydb`:
+```kotlin
+@Entity
+@Table(name = "action_type")
+class ActionTypeEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int = 0,
+
+    var name: String = "",
+
+    var description: String = ""
+)
+```
+- `ActionTypeDto` - DTO-модель (Data Transfer Object) сутності `action_type`:
+```kotlin
+data class ActionTypeDto(
+        val id: Int? = null,
+        var name: String,
+        var description: String
+)
+```
+- `ActionTypeRepository` - CRUD-інтерфейс для сутності `ActionTypeEntity` із `Int`ідентифікатором:
+```kotlin
+import michigang1.me.rest.entity.ActionTypeEntity
+import org.springframework.data.repository.CrudRepository
+interface ActionTypeRepository : CrudRepository<ActionTypeEntity, Int>
+```
+- - -
+- `package service` - сервісний рівень цього **Spring**-модуля, відповідаючий за реалізацію _Request_-функцій `ActionTypeRepository` для _DTO_-моделі:
+
+
+- `ActionTypeServiceImpl`:
+```kotlin
+@Service
+class ActionTypeServiceImpl(
+    private val repository: ActionTypeRepository
+) : ActionTypeService {
+
+    override fun getAll(): List<ActionTypeDto>? {
+        val list = repository.findAll().map { it.toDto() }
+        return list.ifEmpty { throw ActionTypeEmptyTableApiException() }
+    }
+
+    override fun getById(id: Int): ActionTypeDto {
+        return repository.findByIdOrNull(id)
+            ?.toDto()
+            ?: throw ActionTypeNotFoundApiException(id)
+    }
+
+    @Transactional
+    override fun create(dto: ActionTypeDto): Int {
+        val newEntity = repository.save(dto.toEntity())
+        return newEntity.id
+    }
+
+    @Transactional
+    override fun update(id: Int, dto: ActionTypeDto) {
+        var existingEntity = repository.findByIdOrNull(id)
+            ?: throw ActionTypeNotFoundApiException(id)
+
+        existingEntity.name = dto.name
+        existingEntity.description = dto.description
+
+        existingEntity = repository.save(existingEntity)
+    }
+
+    override fun deleteById(id: Int) {
+        val existingEntity = repository.findByIdOrNull(id)
+            ?: throw ActionTypeNotFoundApiException(id)
+
+        existingEntity.id.let { repository.deleteById(it) }
+    }
+
+    private fun ActionTypeEntity.toDto(): ActionTypeDto =
+        ActionTypeDto(
+            id = this.id,
+            name = this.name,
+            description = this.description
+        )
+
+    private fun ActionTypeDto.toEntity(): ActionTypeEntity =
+        ActionTypeEntity(
+            id = this.id!!,
+            name = this.name,
+            description = this.description
+        )
+}
+```
+- `ActionTypeService`: 
+```kotlin
+import michigang1.me.rest.dto.ActionTypeDto
+
+interface ActionTypeService {
+
+    fun getAll(): List<ActionTypeDto>?
+
+    fun getById(id: Int): ActionTypeDto
+
+    fun create(dto: ActionTypeDto): Int
+
+    fun update(id: Int, dto: ActionTypeDto)
+
+    fun deleteById(id: Int)
+}
+```
+---
+- `package controller` - абстрактний рівень взаємодії користувача з сервісом для обробки _HTTP_-запитів (_GET, POST, PUT, DELETE_):
+```kotlin
+
+@RestController
+@RequestMapping("/action-types")
+class ActionTypeController(
+    @Autowired private val service: ActionTypeService
+
+) {
+    @GetMapping("/")
+    fun getAll(): List<ActionTypeDto>? = service.getAll()
+
+    @GetMapping("/{id}", produces = ["application/json"])
+    fun getById(@PathVariable("id") id: Int): ActionTypeDto = service.getById(id)
+
+    @PostMapping(
+        value = ["/post"],
+        consumes = ["application/json"],
+        produces = ["application/json"]
+    )
+    fun create(@RequestBody dto: ActionTypeDto) = service.create(dto)
+
+    @PutMapping("/{id}", consumes = ["application/json"], produces = ["application/json"])
+    fun update(@PathVariable("id") id: Int, @RequestBody dto: ActionTypeDto) = service.update(id, dto)
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable("id") id: Int) = service.deleteById(id)
+}
+```
+---
+- `package exceptions` - пакет для управління помилками:
+
+
+- `ApiError` - дата-клас з описом помилки
+```kotlin
+data class ApiError(
+    val error: String,
+    val description: String
+)
+```
+- `ApiException` - абстрактний клас вилучення 
+```kotlin
+abstract class ApiException(
+    val httpStatus: HttpStatus,
+    val apiError: ApiError
+) : RuntimeException(apiError.description)
+```
+-`ErrorHandler` - класс для надіслання вилучень (`ActionTypeNotFoundApiException`, `ActionTypeEmptyTableApiException`) у відповідь на невдалі запити :
+```kotlin
+@ControllerAdvice
+class ErrorHandler : ResponseEntityExceptionHandler() {
+    @ExceptionHandler(ApiException::class)
+    fun handleApiException(exception: ApiException): ResponseEntity<ApiError> {
+        return ResponseEntity(exception.apiError, exception.httpStatus)
+    }
+}
+
+```
+- `ActionTypeNotFoundApiException` - помилка, яка надішлеться у разі невдалого пошуку сутності за ідентифікатором: 
+```kotlin
+class ActionTypeNotFoundApiException(actionTypeId: Int) : ApiException(
+    HttpStatus.NOT_FOUND,
+    ApiError(
+        error = "action_type.not.found",
+        description = "Action type is not found with id = $actionTypeId "
+    )
+)
+```
+- `ActionTypeEmptyTableApiException` - помилка, яка надішлеться, якщо таблиця `action_type` не має даних:
+```kotlin
+class ActionTypeEmptyTableApiException() : ApiException(
+    HttpStatus.NO_CONTENT,
+    ApiError(
+        error = "action_type.no.content",
+        description = "Table has no content"
+    )
+)
+```
+---
+- `RestApplication.kt` - файл запуску програми:
+```kotlin
+@SpringBootApplication
+class RestApplication
+
+fun main(args: Array<String>) {
+    runApplication<RestApplication>(*args)
+}
+```

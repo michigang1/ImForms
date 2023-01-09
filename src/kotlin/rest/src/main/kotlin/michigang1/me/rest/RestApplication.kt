@@ -1,4 +1,4 @@
-package michigang1.me.rest
+    package michigang1.me.rest
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
