@@ -69,5 +69,5 @@
 ## Останній GET запит (порожня таблиця - Status 204 No Content ): 
 
 <p align="center">
-  <img src="./get_last.png.png">
+  <img src="./get_last.png">
 </p>
